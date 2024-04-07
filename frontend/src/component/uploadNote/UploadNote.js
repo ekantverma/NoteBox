@@ -60,49 +60,39 @@ const UploadNote = () => {
     if ((ShowForm.current.style.display = "flex"))
       ShowForm.current.style.display = "none";
   };
-
   const uploadNoteFormSubmitHandler = async (e) => {
-    alert("Uploading started, it will take few minutes...");
+
+    alert("Uploading started, it will take few minutes...")
     e.preventDefault();
-    const newNote = {
-      userId: user._id,
-      desc: descritpion.current.value,
-      notename: notename.current.value,
-      notefilename: file,
-    };
-    if (fileimg) {
-      const data = new FormData();
-      data.append("file", fileimg);
-      data.append("upload_preset", "handnoteimages");
-      const res = await axios.post(
-        "https://api.cloudinary.com/v1_1/dw2fok6if/image/upload",
-        data
-      );
-      newNote.thumbnailfilename = await res.data.secure_url;
+   const newNote = {
+     userId: user._id,
+     desc: descritpion.current.value,
+     notename:notename.current.value,
+     // eslint-disable-next-line no-undef
+     notefilename :fileurl,
+   };
+   if (fileimg) {
+     const data = new FormData();
+     data.append("file", fileimg);
+     data.append("upload_preset", 'handnoteimages');
+     const res=await axios.post("https://api.cloudinary.com/v1_1/dw2fok6if/image/upload",data)
+     newNote.thumbnailfilename = await  res.data.secure_url;
+     
+//    
+    // else if (file) {
+    //   const data = new FormData();
+    //   data.append("file", file);
+    //   data.append("upload_preset", "handnotefiles");
+    //   const res = await axios.post(
+    //     "mongodb+srv://sanyogsingrajput:SanyogCodeWizards@notebox-clustor1.sm1d0im.mongodb.net/?retryWrites=true&w=majority&appName=Notebox-clustor1",data
+    //   );
+    //   newNote.thumbnailfilename = await res.data.secure_url;
     }
     try {
       await publicRequest.post("/notes", newNote);
       window.location.reload();
       alert("successfully uploaded");
     } catch (err) {}
-    // const uploadNoteFormSubmitHandler = async (e) => {
-    //   e.preventDefault();
-    //   const formData = new FormData();
-    //   formData.append("file", file);
-    //   formData.append("notename", notename.current.value);
-    //   formData.append("desc", descritpion.current.value);
-    //   try {
-    //     await axios.post("http://localhost:5000/upload", formData, {
-    //       headers: {
-    //         "Content-Type": "multipart/form-data",
-    //       },
-    //     });
-    //     alert("File uploaded successfully");
-    //   } catch (error) {
-    //     console.error(error);
-    //     alert("Failed to upload file");
-    //   }
-    // };
   };
 
   const classes = useStyles();
@@ -162,11 +152,10 @@ const UploadNote = () => {
               ></input>
 
               <input
-                accept=".pdf, .txt, .docx, .doc"
-                type="file"
+                type="text"
                 id="upload-note-input"
-                onChange={(e) => setfile(e.target.files)}
-                placeholder="Choose your files"
+                onChange={(e) => setfile(e.target.value)}
+                placeholder="Enter Your Note Yourl"
                 required
               ></input>
 
